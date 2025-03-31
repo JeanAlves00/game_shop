@@ -260,3 +260,27 @@ export const ViewMoreButton = styled.button`
     font-size: 0.9rem;
   }
 `
+
+export const PlatformsContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+`
+
+export const PlatformItem = styled.div`
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4cc9f0;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(76, 201, 240, 0.2);
+    transform: translateY(-2px);
+  }
+`
