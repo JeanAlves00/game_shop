@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  FaShoppingCart,
   FaArrowRight,
   FaHeadphones,
   FaKeyboard,
@@ -14,6 +13,8 @@ import {
 } from 'react-icons/fa'
 import { SiPlaystation, SiNintendo } from 'react-icons/si'
 import * as S from './styles'
+import Card from '../Card'
+import { FeaturesContainer, FeatureItem } from '../Card/styles'
 
 // Interface para os dados de acessórios
 interface AccessoryItem {
@@ -36,7 +37,8 @@ const accessoryItems: AccessoryItem[] = [
     description:
       'Headset com drivers de dupla câmara, microfone destacável e conforto premium para longas sessões de jogo',
     price: 499.9,
-    image: 'https://m.media-amazon.com/images/I/61j5OlQ70+L._AC_SX425_.jpg',
+    image:
+      'https://th.bing.com/th/id/OIP.PyG4h1zdPdm9CWa1VANLJAHaHa?rs=1&pid=ImgDetMain',
     compatibility: ['PC', 'PS', 'Xbox', 'Switch'],
     specs: [
       'Som Surround 7.1',
@@ -68,7 +70,8 @@ const accessoryItems: AccessoryItem[] = [
     description:
       'Teclado mecânico gamer com switches Razer Green, RGB Chroma e construção premium',
     price: 899.9,
-    image: 'https://m.media-amazon.com/images/I/61Lg-l8PX2L._AC_SX425_.jpg',
+    image:
+      'https://th.bing.com/th/id/R.e60cc1aed102caa5ca4a264616c5eaec?rik=WP67FiSLrs9Ggg&pid=ImgRaw&r=0',
     compatibility: ['PC'],
     specs: ['Mecânico', 'RGB', 'Apoio de pulso', 'Switches Green']
   },
@@ -136,6 +139,11 @@ const Accessories: React.FC = () => {
     return null
   }
 
+  const handleBuyClick = (id: number) => {
+    // Implementação futura da função de compra
+    console.log(`Comprando acessório ${id}`)
+  }
+
   return (
     <S.AccessoriesSection>
       <S.SectionHeader>
@@ -144,44 +152,53 @@ const Accessories: React.FC = () => {
       </S.SectionHeader>
 
       <S.CardsContainer>
-        {accessoryItems.map((item) => (
-          <S.AccessoryCard key={item.id}>
-            <S.CategoryTag>
+        {accessoryItems.map((item) => {
+          // Criação de elementos para o Card genérico
+          const topLeftTag = (
+            <>
               {renderCategoryIcon(item.category)} {item.category}
-            </S.CategoryTag>
-            <S.CompatibilityTag>
+            </>
+          )
+
+          const topRightTag = (
+            <>
               {item.compatibility.map((platform, i) => (
                 <React.Fragment key={i}>
                   {renderCompatibilityIcon(platform)}
                   {i < item.compatibility.length - 1 ? ' ' : ''}
                 </React.Fragment>
               ))}
-            </S.CompatibilityTag>
-            <S.CardImageWrapper>
-              <S.CardImage src={item.image} alt={item.title} loading="lazy" />
-            </S.CardImageWrapper>
-            <S.CardContent>
-              <S.CardTitle>{item.title}</S.CardTitle>
-              <S.CardDescription>{item.description}</S.CardDescription>
+            </>
+          )
 
-              <S.SpecsContainer>
-                {item.specs.map((spec, index) => (
-                  <S.SpecItem key={index}>
-                    {renderSpecIcon(spec)} {spec}
-                  </S.SpecItem>
-                ))}
-              </S.SpecsContainer>
+          // Lista de especificações
+          const featuresList = (
+            <FeaturesContainer>
+              {item.specs.map((spec, index) => (
+                <FeatureItem key={index} theme="purple">
+                  {renderSpecIcon(spec)} {spec}
+                </FeatureItem>
+              ))}
+            </FeaturesContainer>
+          )
 
-              <S.PriceContainer>
-                <S.Price>R$ {item.price.toFixed(2)}</S.Price>
-              </S.PriceContainer>
-              <S.BuyButton>
-                <FaShoppingCart />
-                Adicionar ao Carrinho
-              </S.BuyButton>
-            </S.CardContent>
-          </S.AccessoryCard>
-        ))}
+          return (
+            <Card
+              key={item.id}
+              id={item.id}
+              image={item.image}
+              title={item.title}
+              description={item.description}
+              price={item.price}
+              topLeftTag={topLeftTag}
+              topRightTag={topRightTag}
+              featuresList={featuresList}
+              theme="purple"
+              actionButtonText="Adicionar ao Carrinho"
+              onBuyClick={handleBuyClick}
+            />
+          )
+        })}
       </S.CardsContainer>
 
       <S.ViewMoreContainer>

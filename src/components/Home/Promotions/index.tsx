@@ -1,13 +1,15 @@
 import React from 'react'
 import {
-  FaShoppingCart,
   FaArrowRight,
   FaWindows,
   FaPlaystation,
-  FaXbox
+  FaXbox,
+  FaPercentage
 } from 'react-icons/fa'
 import { SiNintendoswitch } from 'react-icons/si'
 import * as S from './styles'
+import Card from '../Card'
+import { PlatformsContainer, PlatformItem } from '../Card/styles'
 
 // Interface para os dados de produtos
 interface PromotionItem {
@@ -140,6 +142,11 @@ const Promotions: React.FC = () => {
     }
   }
 
+  const handleBuyClick = (id: number) => {
+    // Implementação futura da função de compra
+    console.log(`Comprando produto ${id}`)
+  }
+
   return (
     <S.PromotionsSection>
       <S.SectionHeader>
@@ -154,40 +161,40 @@ const Promotions: React.FC = () => {
             item.salePrice
           )
 
+          // Criação de elementos para o Card genérico
+          const topLeftTag = item.category
+          const topRightTag = (
+            <>
+              <FaPercentage /> -{discountPercentage}%
+            </>
+          )
+
+          // Criação das plataformas para games
+          const platformsList = item.category === 'Game' && item.platforms && (
+            <PlatformsContainer>
+              {item.platforms.map((platform, index) => (
+                <PlatformItem key={index} title={platform} theme="pink">
+                  {renderPlatformIcon(platform)}
+                </PlatformItem>
+              ))}
+            </PlatformsContainer>
+          )
+
           return (
-            <S.PromotionCard key={item.id}>
-              <S.DiscountTag>-{discountPercentage}%</S.DiscountTag>
-              <S.CategoryTag>{item.category}</S.CategoryTag>
-              <S.CardImageWrapper>
-                <S.CardImage src={item.image} alt={item.title} loading="lazy" />
-              </S.CardImageWrapper>
-              <S.CardContent>
-                <S.CardTitle>{item.title}</S.CardTitle>
-
-                {/* Exibe as plataformas disponíveis apenas para jogos */}
-                {item.category === 'Game' && item.platforms && (
-                  <S.PlatformsContainer>
-                    {item.platforms.map((platform, index) => (
-                      <S.PlatformItem key={index} title={platform}>
-                        {renderPlatformIcon(platform)}
-                      </S.PlatformItem>
-                    ))}
-                  </S.PlatformsContainer>
-                )}
-
-                <S.CardDescription>{item.description}</S.CardDescription>
-                <S.PriceContainer>
-                  <S.OriginalPrice>
-                    R$ {item.originalPrice.toFixed(2)}
-                  </S.OriginalPrice>
-                  <S.SalePrice>R$ {item.salePrice.toFixed(2)}</S.SalePrice>
-                </S.PriceContainer>
-                <S.BuyButton>
-                  <FaShoppingCart />
-                  Comprar
-                </S.BuyButton>
-              </S.CardContent>
-            </S.PromotionCard>
+            <Card
+              key={item.id}
+              id={item.id}
+              image={item.image}
+              title={item.title}
+              description={item.description}
+              price={{ original: item.originalPrice, sale: item.salePrice }}
+              topLeftTag={topLeftTag}
+              topRightTag={topRightTag}
+              platformsList={platformsList}
+              theme="pink"
+              actionButtonText="Comprar"
+              onBuyClick={handleBuyClick}
+            />
           )
         })}
       </S.CardsContainer>

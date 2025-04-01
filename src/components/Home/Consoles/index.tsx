@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  FaShoppingCart,
   FaArrowRight,
   FaWifi,
   FaHdd,
@@ -10,6 +9,8 @@ import {
 } from 'react-icons/fa'
 import { SiPlaystation, SiNintendo } from 'react-icons/si'
 import * as S from './styles'
+import Card from '../Card'
+import { FeaturesContainer, FeatureItem } from '../Card/styles'
 
 // Interface para os dados de consoles
 interface ConsoleItem {
@@ -43,7 +44,8 @@ const consoleItems: ConsoleItem[] = [
     description:
       'O console Xbox mais rápido e poderoso de todos os tempos com gráficos em 4K e carregamento ultrarrápido',
     price: 4199.9,
-    image: 'https://m.media-amazon.com/images/I/61-jjE67uIL._AC_SX522_.jpg',
+    image:
+      'https://sm.ign.com/ign_br/news/x/xbox-serie/xbox-series-x-all-digital-edition-officially-announced-xbox_xbp4.jpg',
     storage: '1TB SSD',
     features: ['4K', 'Ray Tracing', 'SSD', 'Smart Delivery']
   },
@@ -106,6 +108,11 @@ const Consoles: React.FC = () => {
     }
   }
 
+  const handleBuyClick = (id: number) => {
+    // Implementação futura da função de compra
+    console.log(`Comprando console ${id}`)
+  }
+
   return (
     <S.ConsolesSection>
       <S.SectionHeader>
@@ -114,37 +121,44 @@ const Consoles: React.FC = () => {
       </S.SectionHeader>
 
       <S.CardsContainer>
-        {consoleItems.map((item) => (
-          <S.ConsoleCard key={item.id}>
-            <S.ManufacturerTag>
+        {consoleItems.map((item) => {
+          // Criação de elementos para o Card genérico
+          const topLeftTag = (
+            <>
               {renderManufacturerIcon(item.manufacturer)} {item.manufacturer}
-            </S.ManufacturerTag>
-            <S.StorageTag>{item.storage}</S.StorageTag>
-            <S.CardImageWrapper>
-              <S.CardImage src={item.image} alt={item.title} loading="lazy" />
-            </S.CardImageWrapper>
-            <S.CardContent>
-              <S.CardTitle>{item.title}</S.CardTitle>
-              <S.CardDescription>{item.description}</S.CardDescription>
+            </>
+          )
 
-              <S.FeaturesContainer>
-                {item.features.map((feature, index) => (
-                  <S.FeatureItem key={index}>
-                    {renderFeatureIcon(feature) || null} {feature}
-                  </S.FeatureItem>
-                ))}
-              </S.FeaturesContainer>
+          const topRightTag = item.storage
 
-              <S.PriceContainer>
-                <S.Price>R$ {item.price.toFixed(2)}</S.Price>
-              </S.PriceContainer>
-              <S.BuyButton>
-                <FaShoppingCart />
-                Comprar Agora
-              </S.BuyButton>
-            </S.CardContent>
-          </S.ConsoleCard>
-        ))}
+          // Lista de features/recursos
+          const featuresList = (
+            <FeaturesContainer>
+              {item.features.map((feature, index) => (
+                <FeatureItem key={index} theme="green">
+                  {renderFeatureIcon(feature)} {feature}
+                </FeatureItem>
+              ))}
+            </FeaturesContainer>
+          )
+
+          return (
+            <Card
+              key={item.id}
+              id={item.id}
+              image={item.image}
+              title={item.title}
+              description={item.description}
+              price={item.price}
+              topLeftTag={topLeftTag}
+              topRightTag={topRightTag}
+              featuresList={featuresList}
+              theme="green"
+              actionButtonText="Comprar Agora"
+              onBuyClick={handleBuyClick}
+            />
+          )
+        })}
       </S.CardsContainer>
 
       <S.ViewMoreContainer>

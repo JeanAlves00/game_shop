@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  FaShoppingCart,
   FaArrowRight,
   FaWindows,
   FaPlaystation,
@@ -9,6 +8,8 @@ import {
 } from 'react-icons/fa'
 import { SiNintendoswitch } from 'react-icons/si'
 import * as S from './styles'
+import Card from '../Card'
+import { PlatformsContainer, PlatformItem } from '../Card/styles'
 
 // Interface para os dados de jogos
 interface GameItem {
@@ -32,7 +33,7 @@ const gameItems: GameItem[] = [
       'Um RPG de mundo aberto épico ambientado em um reino criado por Hidetaka Miyazaki e George R. R. Martin',
     price: 299.9,
     image:
-      'https://cdn-products.eneba.com/resized-products/fDEP0qK9LnOcPUXh_OTX0jgZ-lCB0S8PR6kkw7Vozng_350x200_3x-0.jpeg',
+      'https://image.api.playstation.com/vulcan/ap/rnd/202107/1612/Y5RHNmzAtc6sRYwZlYiKHAxN.png',
     rating: 9.5,
     platforms: ['PC', 'PS', 'Xbox']
   },
@@ -44,7 +45,7 @@ const gameItems: GameItem[] = [
       'Um RPG de turno aclamado pela crítica baseado no universo de Dungeons & Dragons',
     price: 199.9,
     image:
-      'https://cdn1.epicgames.com/offer/5b7ca9d4e9f74e9688f842c5c67833d1/EGS_BaldursGate3_LarianStudios_S1_2560x1440-87af866ccc2409abc0c56e5695466aa8',
+      'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1086940/extras/Final_Keyart_BG3.gif?t=1740386911',
     rating: 9.8,
     platforms: ['PC', 'PS']
   },
@@ -56,7 +57,7 @@ const gameItems: GameItem[] = [
       'A sequência de Breath of the Wild leva Link a uma nova aventura nos céus de Hyrule',
     price: 349.9,
     image:
-      'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000063714/276a412988e07c4d55a2996c4d17fce46783c3e0994c7355ec65a0d89378f461',
+      'https://static.wixstatic.com/media/15bb51_2990f2a468de4b76ac1a728ea2a89588~mv2.png/v1/fill/w_568,h_320,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/15bb51_2990f2a468de4b76ac1a728ea2a89588~mv2.png',
     rating: 9.6,
     platforms: ['Switch']
   },
@@ -68,9 +69,9 @@ const gameItems: GameItem[] = [
       'Peter Parker e Miles Morales retornam em uma nova aventura para enfrentar um de seus maiores desafios',
     price: 349.9,
     image:
-      'https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/14e3dc74e74cadb4a6b15e2033aa19f5bd2261af48cb3f38.png',
+      'https://cdn1.epicgames.com/offer/b2818b59c0bb420e9647983dfd254931/EGS_Octopus_InsomniacGamesNixxesSoftware_S1_2560x1440-f27da78f484626718d1e22e7d6950ca5',
     rating: 9.2,
-    platforms: ['PS']
+    platforms: ['PS', 'PC']
   }
 ]
 
@@ -91,6 +92,11 @@ const Games: React.FC = () => {
     }
   }
 
+  const handleBuyClick = (id: number) => {
+    // Implementação futura da função de compra
+    console.log(`Comprando jogo ${id}`)
+  }
+
   return (
     <S.GamesSection>
       <S.SectionHeader>
@@ -99,37 +105,43 @@ const Games: React.FC = () => {
       </S.SectionHeader>
 
       <S.CardsContainer>
-        {gameItems.map((game) => (
-          <S.GameCard key={game.id}>
-            <S.GenreTag>{game.genre}</S.GenreTag>
-            <S.RatingTag>
+        {gameItems.map((game) => {
+          // Criação de elementos para o Card genérico
+          const topLeftTag = game.genre
+          const topRightTag = (
+            <>
               <FaStar /> {game.rating.toFixed(1)}
-            </S.RatingTag>
-            <S.CardImageWrapper>
-              <S.CardImage src={game.image} alt={game.title} loading="lazy" />
-            </S.CardImageWrapper>
-            <S.CardContent>
-              <S.CardTitle>{game.title}</S.CardTitle>
+            </>
+          )
 
-              <S.PlatformsContainer>
-                {game.platforms.map((platform, index) => (
-                  <S.PlatformItem key={index} title={platform}>
-                    {renderPlatformIcon(platform)}
-                  </S.PlatformItem>
-                ))}
-              </S.PlatformsContainer>
+          // Criação das plataformas para games
+          const platformsList = (
+            <PlatformsContainer>
+              {game.platforms.map((platform, index) => (
+                <PlatformItem key={index} title={platform} theme="blue">
+                  {renderPlatformIcon(platform)}
+                </PlatformItem>
+              ))}
+            </PlatformsContainer>
+          )
 
-              <S.CardDescription>{game.description}</S.CardDescription>
-              <S.PriceContainer>
-                <S.Price>R$ {game.price.toFixed(2)}</S.Price>
-              </S.PriceContainer>
-              <S.BuyButton>
-                <FaShoppingCart />
-                Adicionar ao Carrinho
-              </S.BuyButton>
-            </S.CardContent>
-          </S.GameCard>
-        ))}
+          return (
+            <Card
+              key={game.id}
+              id={game.id}
+              image={game.image}
+              title={game.title}
+              description={game.description}
+              price={game.price}
+              topLeftTag={topLeftTag}
+              topRightTag={topRightTag}
+              platformsList={platformsList}
+              theme="blue"
+              actionButtonText="Adicionar ao Carrinho"
+              onBuyClick={handleBuyClick}
+            />
+          )
+        })}
       </S.CardsContainer>
 
       <S.ViewMoreContainer>
