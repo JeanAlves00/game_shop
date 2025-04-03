@@ -6,14 +6,24 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   background: linear-gradient(to right, #1a1a2e, #16213e);
   padding: 0.5rem 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, #4cc9f0, #f72585);
+  }
 
   @media (max-width: 768px) {
     padding: 0.5rem 1rem;
@@ -254,7 +264,7 @@ export const SearchForm = styled.form`
   }
 `
 
-export const MobileMenuButton = styled.button<{ isOpen: boolean }>`
+export const MobileMenuButton = styled.button<{ $isOpen: boolean }>`
   display: none;
   background: none;
   border: none;
@@ -274,7 +284,7 @@ export const MobileMenuButton = styled.button<{ isOpen: boolean }>`
   }
 
   background-color: ${(props) =>
-    props.isOpen ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
+    props.$isOpen ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
 
   span {
     position: absolute;
@@ -285,18 +295,18 @@ export const MobileMenuButton = styled.button<{ isOpen: boolean }>`
     transition: all 0.3s ease;
 
     &:nth-child(1) {
-      transform: translateY(${(props) => (props.isOpen ? '0' : '-7px')})
-        rotate(${(props) => (props.isOpen ? '45deg' : '0')});
+      transform: translateY(${(props) => (props.$isOpen ? '0' : '-7px')})
+        rotate(${(props) => (props.$isOpen ? '45deg' : '0')});
     }
 
     &:nth-child(2) {
-      opacity: ${(props) => (props.isOpen ? '0' : '1')};
-      transform: translateX(${(props) => (props.isOpen ? '-10px' : '0')});
+      opacity: ${(props) => (props.$isOpen ? '0' : '1')};
+      transform: translateX(${(props) => (props.$isOpen ? '-10px' : '0')});
     }
 
     &:nth-child(3) {
-      transform: translateY(${(props) => (props.isOpen ? '0' : '7px')})
-        rotate(${(props) => (props.isOpen ? '-45deg' : '0')});
+      transform: translateY(${(props) => (props.$isOpen ? '0' : '7px')})
+        rotate(${(props) => (props.$isOpen ? '-45deg' : '0')});
     }
   }
 
@@ -314,7 +324,7 @@ export const MobileMenuButton = styled.button<{ isOpen: boolean }>`
   }
 `
 
-export const MobileMenu = styled.div<{ isOpen: boolean }>`
+export const MobileMenu = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 60px;
   left: 0;
@@ -323,12 +333,12 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 99;
-  max-height: ${(props) => (props.isOpen ? 'calc(100vh - 60px)' : '0')};
-  opacity: ${(props) => (props.isOpen ? '1' : '0')};
+  z-index: 999;
+  max-height: ${(props) => (props.$isOpen ? 'calc(100vh - 60px)' : '0')};
+  opacity: ${(props) => (props.$isOpen ? '1' : '0')};
   overflow: hidden;
-  visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
-  padding: ${(props) => (props.isOpen ? '1rem' : '0')};
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+  padding: ${(props) => (props.$isOpen ? '1rem' : '0')};
   transition: all 0.3s ease-in-out;
   transform-origin: top;
   overflow-y: auto;
@@ -340,16 +350,16 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
   ${NavLink} {
     padding: 1rem 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transform: translateY(${(props) => (props.isOpen ? '0' : '-10px')});
-    opacity: ${(props) => (props.isOpen ? '1' : '0')};
+    transform: translateY(${(props) => (props.$isOpen ? '0' : '-10px')});
+    opacity: ${(props) => (props.$isOpen ? '1' : '0')};
     transition: all 0.3s ease;
-    transition-delay: ${(props) => (props.isOpen ? '0.1s' : '0s')};
+    transition-delay: ${(props) => (props.$isOpen ? '0.1s' : '0s')};
     font-size: 1.1rem;
     text-align: center;
 
     &:nth-child(n + 2) {
       transition-delay: ${(props) =>
-        props.isOpen ? `${0.1 + 0.05 * Number(props.isOpen)}s` : '0s'};
+        props.$isOpen ? `${0.1 + 0.05 * Number(props.$isOpen)}s` : '0s'};
     }
 
     &:last-child {
@@ -360,10 +370,10 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
   ${SearchForm} {
     margin: 0.5rem 0 1rem;
     width: 100%;
-    opacity: ${(props) => (props.isOpen ? '1' : '0')};
-    transform: translateY(${(props) => (props.isOpen ? '0' : '-10px')});
+    opacity: ${(props) => (props.$isOpen ? '1' : '0')};
+    transform: translateY(${(props) => (props.$isOpen ? '0' : '-10px')});
     transition: all 0.3s ease;
-    transition-delay: ${(props) => (props.isOpen ? '0.05s' : '0s')};
+    transition-delay: ${(props) => (props.$isOpen ? '0.05s' : '0s')};
 
     input {
       padding: 0.5rem;
@@ -372,7 +382,7 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
 
   @media (max-width: 480px) {
     top: 55px;
-    max-height: ${(props) => (props.isOpen ? 'calc(100vh - 55px)' : '0')};
+    max-height: ${(props) => (props.$isOpen ? 'calc(100vh - 55px)' : '0')};
 
     ${NavLink} {
       padding: 0.9rem 0.5rem;

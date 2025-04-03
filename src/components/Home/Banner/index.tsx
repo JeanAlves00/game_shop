@@ -20,7 +20,7 @@ const Banner: React.FC = () => {
       id: 1,
       title: 'JUDAS',
       imageUrl:
-        'https://static0.gamerantimages.com/wordpress/wp-content/uploads/wm/2024/07/judas-protagonist-with-logo.jpg',
+        'https://i0.wp.com/news.qoo-app.com/en/wp-content/uploads/sites/3/2022/12/QooApp_Judas.jpg',
       price: 299.9,
       releaseDate: '15/12/2025'
     },
@@ -36,7 +36,7 @@ const Banner: React.FC = () => {
       id: 3,
       title: 'Borderlands 4',
       imageUrl:
-        'https://static0.gamerantimages.com/wordpress/wp-content/uploads/wm/2024/09/borderlands-zane-vault-hunter-in-front-of-legendary-loot-with-borderlands-4-logo-gamerant-custom-image.jpg',
+        'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpybMLqWjYG5sehOOzb5-cGMm3tn_285vTeXDIN31efeBWg73pJ2yb5tKWahnQBqtUW8EwnW1Aq-o-7NC5FGFjK9XDDz0Km1WgJXBUsSq_gWr6mDCvyZ5QeW_M38daTZaA_u0OmNvdahCPyIyMe5itTxsQCDLnZ70HMPUppAkfe-sZqWBMgzCh3Bv6bpo/s1920/12230012467357.jpg',
       price: 349.9,
       releaseDate: '22/06/2025'
     }
@@ -131,7 +131,7 @@ const Banner: React.FC = () => {
         {upcomingGames.map((_, idx) => (
           <S.Dot
             key={idx}
-            active={currentSlide === idx}
+            $active={currentSlide === idx}
             onClick={() => goToSlide(idx)}
           />
         ))}

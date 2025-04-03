@@ -93,8 +93,8 @@ export const ViewMoreContainer = styled.div`
 
 export const ViewMoreButton = styled.button`
   background: transparent;
-  border: 2px solid #4cc9f0;
-  color: #4cc9f0;
+  border: 2px solid #f72585; // Alterado de #4cc9f0 para #f72585 (cor do tema pink)
+  color: #f72585; // Alterado de #4cc9f0 para #f72585 (cor do tema pink)
   padding: 0.7rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
@@ -105,7 +105,7 @@ export const ViewMoreButton = styled.button`
   gap: 0.5rem;
 
   &:hover {
-    background-color: rgba(76, 201, 240, 0.1);
+    background-color: rgba(247, 37, 133, 0.1); // Alterado para cor do tema pink
     transform: translateX(5px);
   }
 

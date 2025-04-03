@@ -4,12 +4,17 @@ import * as S from './styles'
 
 export type CardTheme = 'green' | 'blue' | 'purple' | 'pink'
 
+export type PriceInfo = {
+  original?: number
+  sale?: number
+}
+
 export interface CardProps {
   id: number
   image: string
   title: string
   description: string
-  price: number | { original?: number; sale?: number }
+  price: number | PriceInfo
   topLeftTag?: ReactNode
   topRightTag?: ReactNode
   featuresList?: ReactNode
@@ -17,6 +22,7 @@ export interface CardProps {
   actionButtonText?: string
   theme: CardTheme
   onBuyClick?: (id: number) => void
+  showDiscount?: boolean
 }
 
 const Card: React.FC<CardProps> = ({
@@ -39,9 +45,31 @@ const Card: React.FC<CardProps> = ({
     }
   }
 
+  const renderPrice = () => {
+    if (typeof price === 'object' && price.original && price.sale) {
+      return (
+        <>
+          <S.OriginalPrice theme={theme}>
+            R$ {price.original.toFixed(2)}
+          </S.OriginalPrice>
+          <S.SalePrice theme={theme}>R$ {price.sale.toFixed(2)}</S.SalePrice>
+        </>
+      )
+    } else {
+      const priceValue = typeof price === 'number' ? price : price.sale || 0
+      return <S.Price theme={theme}>R$ {priceValue.toFixed(2)}</S.Price>
+    }
+  }
+
   return (
     <S.CardWrapper theme={theme}>
-      {topLeftTag && <S.TopLeftTag>{topLeftTag}</S.TopLeftTag>}
+      {topLeftTag && (
+        <S.TopLeftTag
+          theme={theme as unknown as import('styled-components').DefaultTheme}
+        >
+          {topLeftTag}
+        </S.TopLeftTag>
+      )}
       {topRightTag && (
         <S.TopRightTag theme={theme}>{topRightTag}</S.TopRightTag>
       )}
@@ -59,23 +87,7 @@ const Card: React.FC<CardProps> = ({
 
         {featuresList}
 
-        <S.PriceContainer>
-          {typeof price === 'object' && price.original ? (
-            <>
-              <S.OriginalPrice theme={theme}>
-                R$ {price.original.toFixed(2)}
-              </S.OriginalPrice>
-              <S.SalePrice theme={theme}>
-                R$ {price.sale?.toFixed(2)}
-              </S.SalePrice>
-            </>
-          ) : (
-            <S.Price theme={theme}>
-              R${' '}
-              {(typeof price === 'number' ? price : price.sale || 0).toFixed(2)}
-            </S.Price>
-          )}
-        </S.PriceContainer>
+        <S.PriceContainer>{renderPrice()}</S.PriceContainer>
 
         <S.BuyButton theme={theme} onClick={handleBuyClick}>
           <FaShoppingCart />

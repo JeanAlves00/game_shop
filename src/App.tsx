@@ -1,4 +1,5 @@
 import Header from './components/Header/index'
+import Games from './pages/Games'
 import Home from './pages/Home'
 import { GlobalStyle } from './styles/globalStyles'
 
@@ -9,7 +10,10 @@ const rotas = createBrowserRouter([
     path: '/',
     element: <Home />
   },
-  {}
+  {
+    path: '/jogos',
+    element: <Games />
+  }
 ])
 
 function App() {

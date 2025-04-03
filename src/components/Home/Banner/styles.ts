@@ -234,23 +234,23 @@ export const DotsContainer = styled.div`
   }
 `
 
-export const Dot = styled.div<{ active: boolean }>`
-  width: ${(props) => (props.active ? '14px' : '10px')};
-  height: ${(props) => (props.active ? '14px' : '10px')};
+export const Dot = styled.div<{ $active: boolean }>`
+  width: ${(props) => (props.$active ? '14px' : '10px')};
+  height: ${(props) => (props.$active ? '14px' : '10px')};
   background-color: ${(props) =>
-    props.active ? '#f72585' : 'rgba(255, 255, 255, 0.5)'};
+    props.$active ? '#f72585' : 'rgba(255, 255, 255, 0.5)'};
   border-radius: 50%;
   transition: all 0.3s ease;
   cursor: pointer;
 
   &:hover {
     background-color: ${(props) =>
-      props.active ? '#f72585' : 'rgba(255, 255, 255, 0.8)'};
+      props.$active ? '#f72585' : 'rgba(255, 255, 255, 0.8)'};
     transform: scale(1.1);
   }
 
   @media (max-width: 480px) {
-    width: ${(props) => (props.active ? '12px' : '8px')};
-    height: ${(props) => (props.active ? '12px' : '8px')};
+    width: ${(props) => (props.$active ? '12px' : '8px')};
+    height: ${(props) => (props.$active ? '12px' : '8px')};
   }
 `

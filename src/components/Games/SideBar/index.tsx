@@ -1,440 +1,176 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import * as S from './styles'
+
 import {
+  FaGamepad,
+  FaDragon,
+  FaChessKnight,
+  FaFootballBall,
+  FaCar,
+  FaPuzzlePiece,
+  FaLaptopCode,
+  FaPercentage,
   FaBars,
-  FaTimes,
-  FaPlaystation,
-  FaXbox,
-  FaSteam,
-  FaGamepad
+  FaTimes
 } from 'react-icons/fa'
-import { SiNintendoswitch } from 'react-icons/si'
-import {
-  SidebarContainer,
-  SidebarTitle,
-  CategoryBlock,
-  FilterItem,
-  CheckboxInput,
-  FilterLabel,
-  PriceRangeContainer,
-  PriceInputGroup,
-  PriceInput,
-  RangeSlider,
-  FilterButton,
-  MobileToggle,
-  BadgeCount,
-  ClearButton,
-  CategoryTitle
-} from './styles'
+import { GiRollingDices } from 'react-icons/gi'
 
-interface FilterState {
-  platforms: {
-    playstation: boolean
-    xbox: boolean
-    nintendo: boolean
-    pc: boolean
-    mobile: boolean
-  }
-  genres: {
-    action: boolean
-    adventure: boolean
-    rpg: boolean
-    strategy: boolean
-    simulation: boolean
-    sports: boolean
-    racing: boolean
-    puzzle: boolean
-  }
-  features: {
-    multiplayer: boolean
-    singleplayer: boolean
-    coop: boolean
-    vr: boolean
-  }
-  rating: {
-    five: boolean
-    four: boolean
-    three: boolean
-  }
+interface Category {
+  id: number
+  name: string
+  count: number
+  icon: React.ReactNode
 }
 
-interface FilterStateWithPrice extends FilterState {
-  price: [number, number]
+interface GamesSidebarProps {
+  onCategoryChange?: (categoryId: number | null) => void
+  defaultCategory?: number | null
+  categoryCounts?: Record<number, number> // Nova prop para contagens de categoria
 }
 
-interface SidebarProps {
-  onFilterChange?: (filters: FilterStateWithPrice) => void
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ onFilterChange }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const maxPrice = 300 // Changed from useState to a constant since setter is never used
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 300])
-
-  const [filters, setFilters] = useState({
-    platforms: {
-      playstation: false,
-      xbox: false,
-      nintendo: false,
-      pc: false,
-      mobile: false
-    },
-    genres: {
-      action: false,
-      adventure: false,
-      rpg: false,
-      strategy: false,
-      simulation: false,
-      sports: false,
-      racing: false,
-      puzzle: false
-    },
-    features: {
-      multiplayer: false,
-      singleplayer: false,
-      coop: false,
-      vr: false
-    },
-    rating: {
-      five: false,
-      four: false,
-      three: false
-    }
+const GamesSidebar: React.FC<GamesSidebarProps> = ({
+  onCategoryChange,
+  defaultCategory = null,
+  categoryCounts = {} // Valor padrão vazio
+}) => {
+  // Em telas grandes, sidebar começa aberta
+  // Em telas pequenas, sidebar começa fechada
+  const [isOpen, setIsOpen] = useState(() => {
+    return window.innerWidth > 768
   })
+  const [activeCategory, setActiveCategory] = useState<number | null>(
+    defaultCategory
+  )
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
-
-  const handleFilterChange = <T extends keyof FilterState>(
-    category: T,
-    item: keyof FilterState[T]
-  ) => {
-    setFilters({
-      ...filters,
-      [category]: {
-        ...filters[category],
-        [item]: !filters[category][item]
-      }
-    })
-  }
-
-  const handlePriceChange = (min: number, max: number) => {
-    setPriceRange([min, max])
-  }
-
-  const applyFilters = () => {
-    if (onFilterChange) {
-      onFilterChange({
-        ...filters,
-        price: priceRange
-      })
+  const categories: Category[] = [
+    { id: 1, name: 'Ação', count: categoryCounts[1] || 0, icon: <FaGamepad /> },
+    {
+      id: 2,
+      name: 'Aventura',
+      count: categoryCounts[2] || 0,
+      icon: <FaDragon />
+    },
+    {
+      id: 3,
+      name: 'RPG',
+      count: categoryCounts[3] || 0,
+      icon: <GiRollingDices />
+    },
+    {
+      id: 4,
+      name: 'Estratégia',
+      count: categoryCounts[4] || 0,
+      icon: <FaChessKnight />
+    },
+    {
+      id: 5,
+      name: 'Esportes',
+      count: categoryCounts[5] || 0,
+      icon: <FaFootballBall />
+    },
+    { id: 6, name: 'Corrida', count: categoryCounts[6] || 0, icon: <FaCar /> },
+    {
+      id: 7,
+      name: 'Puzzle',
+      count: categoryCounts[7] || 0,
+      icon: <FaPuzzlePiece />
+    },
+    {
+      id: 8,
+      name: 'Indie',
+      count: categoryCounts[8] || 0,
+      icon: <FaLaptopCode />
+    },
+    {
+      id: 9,
+      name: 'Promoções',
+      count: categoryCounts[9] || 0,
+      icon: <FaPercentage />
     }
-    // Em dispositivos móveis, fecha a sidebar após aplicar filtros
+  ]
+
+  // Detecta redimensionamento da tela e ajusta o estado da sidebar
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        // Em telas grandes, manter sempre aberto
+        setIsOpen(true)
+      } else {
+        // Em telas pequenas, manter fechado por padrão
+        setIsOpen(false)
+      }
+    }
+
+    // Aplicar na primeira renderização
+    handleResize()
+
+    // Aplicar em cada redimensionamento
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  useEffect(() => {
+    // Notificar o componente pai sobre a mudança de categoria
+    if (onCategoryChange) {
+      onCategoryChange(activeCategory)
+    }
+  }, [activeCategory, onCategoryChange])
+
+  const handleCategoryClick = (categoryId: number) => {
+    // Se clicar na categoria já ativa, desativa a seleção
+    if (activeCategory === categoryId) {
+      setActiveCategory(null)
+    } else {
+      setActiveCategory(categoryId)
+    }
+
+    // Em dispositivos móveis, fechar a sidebar após selecionar categoria
     if (window.innerWidth <= 768) {
       setIsOpen(false)
     }
   }
 
-  const clearFilters = () => {
-    setFilters({
-      platforms: {
-        playstation: false,
-        xbox: false,
-        nintendo: false,
-        pc: false,
-        mobile: false
-      },
-      genres: {
-        action: false,
-        adventure: false,
-        rpg: false,
-        strategy: false,
-        simulation: false,
-        sports: false,
-        racing: false,
-        puzzle: false
-      },
-      features: {
-        multiplayer: false,
-        singleplayer: false,
-        coop: false,
-        vr: false
-      },
-      rating: {
-        five: false,
-        four: false,
-        three: false
-      }
-    })
-    setPriceRange([0, maxPrice])
-  }
-
-  const countActiveFilters = () => {
-    let count = 0
-
-    // Conta filtros de plataforma
-    Object.values(filters.platforms).forEach((val) => {
-      if (val) count++
-    })
-
-    // Conta filtros de gênero
-    Object.values(filters.genres).forEach((val) => {
-      if (val) count++
-    })
-
-    // Conta filtros de recursos
-    Object.values(filters.features).forEach((val) => {
-      if (val) count++
-    })
-
-    // Conta filtros de avaliação
-    Object.values(filters.rating).forEach((val) => {
-      if (val) count++
-    })
-
-    // Adiciona filtro de preço se não estiver no padrão
-    if (priceRange[0] > 0 || priceRange[1] < maxPrice) {
-      count++
-    }
-
-    return count
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen)
   }
 
   return (
     <>
-      <MobileToggle onClick={toggleSidebar}>
-        {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-      </MobileToggle>
+      <S.ToggleButton
+        onClick={toggleSidebar}
+        aria-label={
+          isOpen ? 'Fechar menu de categorias' : 'Abrir menu de categorias'
+        }
+      >
+        {isOpen ? <FaTimes /> : <FaBars />}
+      </S.ToggleButton>
 
-      <SidebarContainer isOpen={isOpen}>
-        <SidebarTitle>
-          Filtros
-          {countActiveFilters() > 0 && (
-            <BadgeCount>{countActiveFilters()}</BadgeCount>
-          )}
-        </SidebarTitle>
+      {/* Overlay só aparece em telas pequenas quando o menu está aberto */}
+      {isOpen && <S.SidebarOverlay onClick={toggleSidebar} />}
 
-        <CategoryBlock>
-          <CategoryTitle>Plataformas</CategoryTitle>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="playstation"
-              checked={filters.platforms.playstation}
-              onChange={() => handleFilterChange('platforms', 'playstation')}
-            />
-            <FilterLabel htmlFor="playstation">
-              <FaPlaystation style={{ marginRight: '8px' }} /> PlayStation
-            </FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="xbox"
-              checked={filters.platforms.xbox}
-              onChange={() => handleFilterChange('platforms', 'xbox')}
-            />
-            <FilterLabel htmlFor="xbox">
-              <FaXbox style={{ marginRight: '8px' }} /> Xbox
-            </FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="nintendo"
-              checked={filters.platforms.nintendo}
-              onChange={() => handleFilterChange('platforms', 'nintendo')}
-            />
-            <FilterLabel htmlFor="nintendo">
-              <SiNintendoswitch style={{ marginRight: '8px' }} /> Nintendo
-            </FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="pc"
-              checked={filters.platforms.pc}
-              onChange={() => handleFilterChange('platforms', 'pc')}
-            />
-            <FilterLabel htmlFor="pc">
-              <FaSteam style={{ marginRight: '8px' }} /> PC
-            </FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="mobile"
-              checked={filters.platforms.mobile}
-              onChange={() => handleFilterChange('platforms', 'mobile')}
-            />
-            <FilterLabel htmlFor="mobile">
-              <FaGamepad style={{ marginRight: '8px' }} /> Mobile
-            </FilterLabel>
-          </FilterItem>
-        </CategoryBlock>
-
-        <CategoryBlock>
-          <CategoryTitle>Gêneros</CategoryTitle>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="action"
-              checked={filters.genres.action}
-              onChange={() => handleFilterChange('genres', 'action')}
-            />
-            <FilterLabel htmlFor="action">Ação</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="adventure"
-              checked={filters.genres.adventure}
-              onChange={() => handleFilterChange('genres', 'adventure')}
-            />
-            <FilterLabel htmlFor="adventure">Aventura</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="rpg"
-              checked={filters.genres.rpg}
-              onChange={() => handleFilterChange('genres', 'rpg')}
-            />
-            <FilterLabel htmlFor="rpg">RPG</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="strategy"
-              checked={filters.genres.strategy}
-              onChange={() => handleFilterChange('genres', 'strategy')}
-            />
-            <FilterLabel htmlFor="strategy">Estratégia</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="simulation"
-              checked={filters.genres.simulation}
-              onChange={() => handleFilterChange('genres', 'simulation')}
-            />
-            <FilterLabel htmlFor="simulation">Simulação</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="sports"
-              checked={filters.genres.sports}
-              onChange={() => handleFilterChange('genres', 'sports')}
-            />
-            <FilterLabel htmlFor="sports">Esportes</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="racing"
-              checked={filters.genres.racing}
-              onChange={() => handleFilterChange('genres', 'racing')}
-            />
-            <FilterLabel htmlFor="racing">Corrida</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="puzzle"
-              checked={filters.genres.puzzle}
-              onChange={() => handleFilterChange('genres', 'puzzle')}
-            />
-            <FilterLabel htmlFor="puzzle">Puzzle</FilterLabel>
-          </FilterItem>
-        </CategoryBlock>
-
-        <CategoryBlock>
-          <CategoryTitle>Recursos</CategoryTitle>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="multiplayer"
-              checked={filters.features.multiplayer}
-              onChange={() => handleFilterChange('features', 'multiplayer')}
-            />
-            <FilterLabel htmlFor="multiplayer">Multiplayer</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="singleplayer"
-              checked={filters.features.singleplayer}
-              onChange={() => handleFilterChange('features', 'singleplayer')}
-            />
-            <FilterLabel htmlFor="singleplayer">Single Player</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="coop"
-              checked={filters.features.coop}
-              onChange={() => handleFilterChange('features', 'coop')}
-            />
-            <FilterLabel htmlFor="coop">Cooperativo</FilterLabel>
-          </FilterItem>
-          <FilterItem>
-            <CheckboxInput
-              type="checkbox"
-              id="vr"
-              checked={filters.features.vr}
-              onChange={() => handleFilterChange('features', 'vr')}
-            />
-            <FilterLabel htmlFor="vr">Realidade Virtual</FilterLabel>
-          </FilterItem>
-        </CategoryBlock>
-
-        <CategoryBlock>
-          <CategoryTitle>Preço</CategoryTitle>
-          <PriceRangeContainer>
-            <RangeSlider
-              type="range"
-              min={0}
-              max={maxPrice}
-              value={priceRange[1]}
-              onChange={(e) =>
-                handlePriceChange(priceRange[0], parseInt(e.target.value))
-              }
-            />
-            <PriceInputGroup>
-              <PriceInput
-                type="number"
-                value={priceRange[0]}
-                onChange={(e) =>
-                  handlePriceChange(
-                    Math.min(parseInt(e.target.value), priceRange[1]),
-                    priceRange[1]
-                  )
-                }
-                placeholder="Min"
-              />
-              <PriceInput
-                type="number"
-                value={priceRange[1]}
-                onChange={(e) =>
-                  handlePriceChange(priceRange[0], parseInt(e.target.value))
-                }
-                placeholder="Max"
-              />
-            </PriceInputGroup>
-          </PriceRangeContainer>
-        </CategoryBlock>
-
-        <FilterButton onClick={applyFilters}>Aplicar Filtros</FilterButton>
-
-        {countActiveFilters() > 0 && (
-          <ClearButton onClick={clearFilters}>
-            Limpar todos os filtros
-          </ClearButton>
-        )}
-      </SidebarContainer>
+      <S.SidebarContainer isOpen={isOpen}>
+        <S.SidebarTitle>Categorias</S.SidebarTitle>
+        <S.CategoriesList>
+          {categories.map((category) => (
+            <S.CategoryItem
+              key={category.id}
+              isActive={activeCategory === category.id}
+            >
+              <S.CategoryButton
+                isActive={activeCategory === category.id}
+                onClick={() => handleCategoryClick(category.id)}
+              >
+                <S.CategoryIcon>{category.icon}</S.CategoryIcon>
+                {category.name}
+                <S.CategoryCount>{category.count}</S.CategoryCount>
+              </S.CategoryButton>
+            </S.CategoryItem>
+          ))}
+        </S.CategoriesList>
+        <S.SidebarFooter>Mais categorias em breve!</S.SidebarFooter>
+      </S.SidebarContainer>
     </>
   )
 }
 
-export default Sidebar
+export default GamesSidebar

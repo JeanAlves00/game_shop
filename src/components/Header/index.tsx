@@ -92,7 +92,7 @@ const Header: React.FC = () => {
           ref={menuButtonRef}
           onClick={toggleMobileMenu}
           aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-          isOpen={mobileMenuOpen}
+          $isOpen={mobileMenuOpen}
         >
           <span></span>
           <span></span>
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
       </S.ActionsContainer>
 
       <S.MobileMenu
-        isOpen={mobileMenuOpen}
+        $isOpen={mobileMenuOpen}
         className="mobile-menu"
         ref={mobileMenuRef}
       >
