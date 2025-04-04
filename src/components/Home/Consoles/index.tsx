@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaArrowRight } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 import * as S from './styles'
 import Card from '../../Card'
 import { FeaturesContainer, FeatureItem } from '../../Card/styles'
@@ -62,9 +63,8 @@ const Consoles: React.FC = () => {
           )
         })}
       </S.CardsContainer>
-
       <S.ViewMoreContainer>
-        <S.ViewAllButton>
+        <S.ViewAllButton as={Link} to="/consoles">
           Ver todos os consoles <FaArrowRight />
         </S.ViewAllButton>
       </S.ViewMoreContainer>
