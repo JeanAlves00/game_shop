@@ -8,7 +8,10 @@ type ThemeContextType = {
   isDarkTheme: boolean
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+// Exporte o contexto para que o hook possa acessá-lo
+export const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined
+)
 
 // Hook para facilitar o uso do contexto em outros componentes
 export const useTheme = () => {
