@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { colors } from '../../../styles/globalStyles'
 
 export const BannerContainer = styled.div`
+  padding-top: 50px;
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -50,7 +50,7 @@ export const GameOverlay = styled.div`
   right: 0;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0));
   padding: 3rem;
-  color: ${colors.branca};
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -69,7 +69,7 @@ export const GameOverlay = styled.div`
 `
 
 export const PreReleaseTag = styled.span`
-  background-color: ${colors.verde};
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   padding: 0.4rem 1rem;
   border-radius: 4px;
@@ -128,7 +128,7 @@ export const PriceContainer = styled.div`
 export const Price = styled.span`
   font-size: 2.2rem;
   font-weight: bold;
-  color: ${colors.branca};
+  color: #ffffff;
 
   @media (max-width: 480px) {
     font-size: 1.5rem;
@@ -136,7 +136,11 @@ export const Price = styled.span`
 `
 
 export const ReserveButton = styled.button`
-  background: linear-gradient(to right, #f72585, #b5179e);
+  background: linear-gradient(
+    to right,
+    ${({ theme }) => theme.colors.secondary},
+    ${({ theme }) => theme.colors.secondary}dd
+  );
   color: white;
   border: none;
   padding: 1rem 2rem;

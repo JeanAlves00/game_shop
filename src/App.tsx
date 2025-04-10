@@ -1,35 +1,43 @@
-import Header from './components/Header/index'
-import Consoles from './pages/Consoles'
-import Games from './pages/Games'
-import Home from './pages/Home'
-import { GlobalStyle } from './styles/globalStyles'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { useTheme } from './contexts/ThemeContext'
+import { GlobalStyle } from './styles/globalStyles'
+import Layout from './components/Layout'
+import Home from './pages/Home'
 
-const rotas = createBrowserRouter([
+// Definição das rotas da aplicação
+const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />
-  },
-  {
-    path: '/jogos',
-    element: <Games />
-  },
-  {
-    path: '/consoles',
-    element: <Consoles />
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      }
+      // Aqui você pode adicionar mais rotas conforme necessário
+    ]
   }
 ])
 
-function App() {
+// Componente que aplica o tema e estilos globais
+function AppContent() {
+  const { currentTheme } = useTheme()
+
   return (
     <>
-      <GlobalStyle />
-      <div>
-        <Header />
-      </div>
-      <RouterProvider router={rotas} />
+      <GlobalStyle theme={currentTheme} />
+      <RouterProvider router={router} />
     </>
+  )
+}
+
+// Componente principal da aplicação
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   )
 }
 

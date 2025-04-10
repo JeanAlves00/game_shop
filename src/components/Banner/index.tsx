@@ -1,98 +1,58 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import * as S from './styles'
-
-interface GameData {
-  id: number
-  title: string
-  imageUrl: string
-  price: number
-  releaseDate: string
-}
+import { upcomingGames } from './data'
 
 const Banner: React.FC = () => {
+  // Estados e Refs
   const [currentSlide, setCurrentSlide] = useState(0)
   const currentSlideRef = useRef(currentSlide)
-  const totalSlidesRef = useRef(0)
+  const totalSlidesRef = useRef(upcomingGames.length)
 
-  // Dados de jogos em pré-lançamento
-  const upcomingGames: GameData[] = [
-    {
-      id: 1,
-      title: 'JUDAS',
-      imageUrl:
-        'https://i0.wp.com/news.qoo-app.com/en/wp-content/uploads/sites/3/2022/12/QooApp_Judas.jpg',
-      price: 299.9,
-      releaseDate: '15/12/2025'
-    },
-    {
-      id: 2,
-      title: 'Grand Theft Auto VI',
-      imageUrl:
-        'https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/71d4d17edcd49703a5ea446cc0e588e6.jpg',
-      price: 349.9,
-      releaseDate: '10/09/2025'
-    },
-    {
-      id: 3,
-      title: 'Borderlands 4',
-      imageUrl:
-        'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpybMLqWjYG5sehOOzb5-cGMm3tn_285vTeXDIN31efeBWg73pJ2yb5tKWahnQBqtUW8EwnW1Aq-o-7NC5FGFjK9XDDz0Km1WgJXBUsSq_gWr6mDCvyZ5QeW_M38daTZaA_u0OmNvdahCPyIyMe5itTxsQCDLnZ70HMPUppAkfe-sZqWBMgzCh3Bv6bpo/s1920/12230012467357.jpg',
-      price: 349.9,
-      releaseDate: '22/06/2025'
-    }
-  ]
-
-  // Atualiza a ref quando currentSlide muda
+  // Sincroniza a ref com o estado atual
   useEffect(() => {
     currentSlideRef.current = currentSlide
   }, [currentSlide])
 
-  // Inicializa a contagem total de slides
+  // Configuração da rotação automática do carrossel
   useEffect(() => {
-    totalSlidesRef.current = upcomingGames.length
-  }, [upcomingGames.length])
-
-  // Configuração do carousel
-  useEffect(() => {
-    // Rotação automática com intervalo
     const interval = setInterval(() => {
-      const nextSlide =
-        currentSlideRef.current === totalSlidesRef.current - 1
-          ? 0
-          : currentSlideRef.current + 1
+      const nextSlide = (currentSlideRef.current + 1) % totalSlidesRef.current
       setCurrentSlide(nextSlide)
     }, 5000)
 
     return () => clearInterval(interval)
   }, [])
 
+  // Navegação do carrossel
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index)
   }, [])
 
   const goToPrevSlide = useCallback(() => {
     const newIndex =
-      currentSlide === 0 ? upcomingGames.length - 1 : currentSlide - 1
+      (currentSlide - 1 + upcomingGames.length) % upcomingGames.length
     goToSlide(newIndex)
-  }, [currentSlide, upcomingGames.length, goToSlide])
+  }, [currentSlide, goToSlide])
 
   const goToNextSlide = useCallback(() => {
-    const newIndex =
-      currentSlide === upcomingGames.length - 1 ? 0 : currentSlide + 1
+    const newIndex = (currentSlide + 1) % upcomingGames.length
     goToSlide(newIndex)
-  }, [currentSlide, upcomingGames.length, goToSlide])
+  }, [currentSlide, goToSlide])
 
+  // Tratamento de eventos
   const handleReserve = (gameId: number) => {
     console.log(`Jogo #${gameId} reservado!`)
-    // Aqui você implementaria a lógica de reserva
+    // Implementar lógica de reserva futuramente
     alert(`Pré-venda do jogo #${gameId} reservada com sucesso!`)
   }
 
   return (
     <S.BannerContainer>
+      {/* Wrapper do carrossel */}
       <S.CarouselWrapper
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
+        {/* Slides de jogos */}
         {upcomingGames.map((game) => (
           <S.SlideItem key={game.id}>
             <S.GameImage src={game.imageUrl} alt={game.title} />
@@ -111,6 +71,7 @@ const Banner: React.FC = () => {
         ))}
       </S.CarouselWrapper>
 
+      {/* Botões de navegação */}
       <S.NavigationButton
         className="prev"
         onClick={goToPrevSlide}
@@ -127,6 +88,7 @@ const Banner: React.FC = () => {
         &#8250;
       </S.NavigationButton>
 
+      {/* Indicadores de slides */}
       <S.DotsContainer>
         {upcomingGames.map((_, idx) => (
           <S.Dot
