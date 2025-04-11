@@ -8,10 +8,10 @@ const Promotions: React.FC = () => {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('destaques')
   const [timer, setTimer] = useState({
-    days: 0,
+    days: 7,
     hours: 0,
     minutes: 0,
-    seconds: 30 // Definido para 30 segundos para facilitar testes
+    seconds: 0 // Definido para 30 segundos para facilitar testes
   })
 
   // Índices para rastrear quais grupos de produtos estão sendo exibidos

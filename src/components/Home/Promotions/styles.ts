@@ -154,6 +154,7 @@ export const BannerImage = styled.div`
     object-fit: contain;
     transform: scale(1.1);
     transition: transform 0.5s ease;
+    border-radius: 20px;
 
     &:hover {
       transform: scale(1.15);
