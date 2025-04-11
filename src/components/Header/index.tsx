@@ -8,7 +8,6 @@ import {
   FaMoon,
   FaSun
 } from 'react-icons/fa'
-
 import * as S from './styles'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import { useTheme } from '../../contexts/ThemeContext'
