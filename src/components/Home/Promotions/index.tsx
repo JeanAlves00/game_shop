@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CardPromotions from '../../Cards/CardPromotions'
 import * as S from './styles'
-import { allProducts } from '../../../data/dataHomePromotions'
+import { allProducts } from '../../../data/Home/dataHomePromotions'
 
 const Promotions: React.FC = () => {
   const navigate = useNavigate()
@@ -193,19 +193,19 @@ const Promotions: React.FC = () => {
 
         <S.PromoTabs>
           <S.PromoTab
-            active={activeTab === 'destaques'}
+            $active={activeTab === 'destaques'}
             onClick={() => handleTabChange('destaques')}
           >
             Destaques
           </S.PromoTab>
           <S.PromoTab
-            active={activeTab === 'consoles'}
+            $active={activeTab === 'consoles'}
             onClick={() => handleTabChange('consoles')}
           >
             Consoles
           </S.PromoTab>
           <S.PromoTab
-            active={activeTab === 'jogos'}
+            $active={activeTab === 'jogos'}
             onClick={() => handleTabChange('jogos')}
           >
             Jogos

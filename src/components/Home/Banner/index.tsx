@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import * as S from './styles'
-import { upcomingGames } from '../../../data/dataBanner'
+import { upcomingGames } from '../../../data/Home/dataBanner'
 
 const Banner: React.FC = () => {
   // Estados e Refs

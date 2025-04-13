@@ -35,11 +35,11 @@ export const PromoTabs = styled.div`
   gap: 15px;
 `
 
-export const PromoTab = styled.button<{ active: boolean }>`
-  background: ${({ active, theme }) =>
-    active ? theme.colors.secondary : 'transparent'};
-  color: ${({ active, theme }) =>
-    active ? 'white' : theme.colors.text.secondary};
+export const PromoTab = styled.button<{ $active: boolean }>`
+  background: ${({ $active, theme }) =>
+    $active ? theme.colors.secondary : 'transparent'};
+  color: ${({ $active, theme }) =>
+    $active ? 'white' : theme.colors.text.secondary};
   border: 2px solid ${({ theme }) => theme.colors.secondary};
   padding: 10px 25px;
   border-radius: 30px;
@@ -48,9 +48,18 @@ export const PromoTab = styled.button<{ active: boolean }>`
   transition: all 0.3s ease;
 
   &:hover {
-    background: ${({ active, theme }) =>
-      active ? theme.colors.secondary : 'rgba(247, 37, 133, 0.1)'};
+    background: ${({ $active, theme }) =>
+      $active ? theme.colors.secondary : 'rgba(247, 37, 133, 0.1)'};
   }
+
+  ${({ $active, theme }) =>
+    $active &&
+    `
+    // Estilos quando ativo
+    // Por exemplo:
+    // background-color: ${theme.colors.primary};
+    // color: ${theme.colors.white};
+  `}
 `
 
 export const HighlightBanner = styled.div`

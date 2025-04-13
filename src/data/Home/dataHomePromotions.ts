@@ -127,7 +127,7 @@ export const allProducts = {
         id: 4,
         title: 'PlayStation 5 Pro',
         description:
-          'A versão mais potente do console da Sony com gráficos melhorados',
+          'A k mais potente do console da Sony com gráficos melhorados',
         oldPrice: 'R$ 5.499,00',
         newPrice: 'R$ 4.799,00',
         discount: '-13%',

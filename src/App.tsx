@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { useTheme } from './hooks/useTheme' // Atualize esta importação
+import { useTheme } from './hooks/useTheme'
 import { GlobalStyle } from './styles/globalStyles'
 import Layout from './components/Layout'
 import Home from './pages/Home'
