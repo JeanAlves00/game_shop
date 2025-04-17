@@ -10,7 +10,7 @@ import {
 } from 'react-icons/fa'
 import * as S from './styles'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
-import { useTheme } from '../../contexts/ThemeContext'
+import { useTheme } from '../../hooks/useTheme'
 
 // Componente para o Logo
 const Logo: React.FC = () => {

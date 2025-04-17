@@ -1,4 +1,5 @@
 import Banner from '../../components/Home/Banner'
+import GamesSection from '../../components/Home/Games'
 import Promotions from '../../components/Home/Promotions'
 
 const Home = () => {
@@ -6,6 +7,7 @@ const Home = () => {
     <>
       <Banner />
       <Promotions />
+      <GamesSection />
     </>
   )
 }
